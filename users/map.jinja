@@ -1,21 +1,27 @@
-# -*- coding: utf-8 -*-
-# vim: ft=jinja
+# vim: sts=2 ts=2 sw=2 et ai
 
-
-{##
-Setup variables using grains['os_family'] based logic, only add key:values
-that differ from what is in defaults.yaml
-##}
 {% set users = salt['grains.filter_by']({
-        'Ubuntu': {
-          'user_add': 'canonical',
-	  'user_rm': 'redhat',
-          'key_path': 'tests/ubuntu.pem'},
-        'CentOS': {
-          'user_add': 'redhat',
-          'user_rm': 'canonical',
-          'key_path': 'tests/centos.pem'}
-  }
-  , grain="os_family"
-  , merge=salt['pillar.get']('users:users'))
-%}
+  'Debian': {
+    'sudoers_dir': '/etc/sudoers.d',
+    'sudoers_file': '/etc/sudoers',
+    'googleauth_dir': '/etc/google_authenticator.d',
+    'root_group': 'root',
+    'shell': '/bin/bash',
+    'visudo_shell': '/bin/bash',
+    'bash_package': 'bash',
+    'sudo_package': 'sudo',
+    'googleauth_package': 'libpam-google-authenticator',
+  },
+  'RedHat': {
+    'sudoers_dir': '/etc/sudoers.d',
+    'sudoers_file': '/etc/sudoers',
+    'googleauth_dir': '/etc/google_authenticator.d',
+    'root_group': 'root',
+    'shell': '/bin/bash',
+    'visudo_shell': '/bin/bash',
+    'bash_package': 'bash',
+    'sudo_package': 'sudo',
+    'googleauth_package': 'libpam-google-authenticator',
+  },
+}, merge=salt['pillar.get']('users-formula:lookup')) %}
+
